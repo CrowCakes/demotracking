@@ -4,13 +4,15 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 public class DemoOrder {
 	private int orderID;
 	private String client;
 	private String rfd;
 	private String ard;
 	private String accountManager;
-	private String status;
+	private String status; //"Active", "Internal", "Pullout", "Returned"
 	private List<OrderDuration> schedule;
 	private List<OrderItem> items;
 	

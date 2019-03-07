@@ -88,6 +88,7 @@ public class OrderForm extends OrderFormLayout {
 	
 	private void bind_fields() {
 		orderID.setEnabled(false);
+		status.setItems("Active", "Internal", "Pullout", "Returned");
 		
 		binder.bind(orderID, DemoOrder::getOrderIDStr, DemoOrder::setOrderID);
 		binder.bind(client, DemoOrder::getClient, DemoOrder::setClient);

@@ -11,6 +11,7 @@ import com.example.demotracking.classes.OrderItemPart;
 import com.vaadin.data.Binder;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
@@ -23,7 +24,7 @@ public class ItemPanel extends Panel {
 	protected TextField serial = new TextField("Serial#");
 	protected TextField source = new TextField("Source");
 	protected TextArea itemRemarks = new TextArea("Item Remarks");
-	protected TextField itemStatus = new TextField("Item Status");
+	protected NativeSelect<String> itemStatus = new NativeSelect<>("Item Status");
 	protected VerticalLayout itemLayout = new VerticalLayout(
 			new HorizontalLayout(name),
 			new HorizontalLayout(quantity, serial),
@@ -65,6 +66,8 @@ public class ItemPanel extends Panel {
 	}
 	
 	private void bind_fields() {
+		itemStatus.setItems("Active", "Returned");
+		
 		binder.bind(name, OrderItem::getName, OrderItem::setName);
 		binder.bind(quantity, OrderItem::getQuantityStr, OrderItem::setQuantity);
 		binder.bind(serial, OrderItem::getSerial, OrderItem::setSerial);

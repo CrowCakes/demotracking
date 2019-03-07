@@ -14,9 +14,16 @@ public class MainPageLayout extends CssLayout implements View {
 	
 	protected TextField serialFilter = new TextField();
 	
-	protected Button refresh = new Button("Refresh");
+	protected Button outstandingOrders = new Button("Outstanding Orders");
+	protected Button internalOrders = new Button("In House Orders");
+	protected Button dueOrders = new Button("Due Orders");
+	protected Button pullOutOrders = new Button("Pulling-out Orders");
+	protected Button returnedOrders = new Button("Returned Orders");
 	protected Button addOrder = new Button("Add New");
+	protected Button openReport = new Button("Generate Due Date Report");
 	
-	protected HorizontalLayout buttons = new HorizontalLayout(serialFilter, refresh, addOrder);
-	protected VerticalLayout layout = new VerticalLayout(buttons, display_orders);
+	protected HorizontalLayout buttons = new HorizontalLayout(serialFilter, addOrder, openReport);
+	protected HorizontalLayout viewButtons = new HorizontalLayout(outstandingOrders,
+			internalOrders, dueOrders, pullOutOrders, returnedOrders);
+	protected VerticalLayout layout = new VerticalLayout(buttons, display_orders, viewButtons);
 }

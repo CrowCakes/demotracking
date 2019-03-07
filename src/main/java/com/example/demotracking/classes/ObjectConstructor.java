@@ -175,12 +175,69 @@ public class ObjectConstructor {
 		return parsed_data;
 	}
 
+	/***
+	 * Constructs the list of active DemoOrders that are not yet due, not including their OrderItems.
+	 * @param manager
+	 * @return
+	 */
 	public List<DemoOrder> constructOrders(ConnectionManager manager) {
 		manager.connect();
 		String result = manager.send(constructMessage("ViewOrders", new ArrayList<String>()));
 		manager.disconnect();
 		
 		return parseOrders(result);
+	}
+	
+	public List<DemoOrder> constructInHouseOrders(ConnectionManager manager) {
+		manager.connect();
+		String result = manager.send(constructMessage("ViewInHouseOrders", new ArrayList<String>()));
+		manager.disconnect();
+		
+		return parseOrders(result);
+	}
+	
+	public List<DemoOrder> constructDueOrdersNoItems(ConnectionManager manager) {
+		manager.connect();
+		String result = manager.send(constructMessage("ViewDueOrders", new ArrayList<String>()));
+		manager.disconnect();
+		
+		return parseOrders(result);
+	}
+	
+	public List<DemoOrder> constructPullOutOrders(ConnectionManager manager) {
+		manager.connect();
+		String result = manager.send(constructMessage("ViewPullOutOrders", new ArrayList<String>()));
+		manager.disconnect();
+		
+		return parseOrders(result);
+	}
+	
+	public List<DemoOrder> constructReturnedOrders(ConnectionManager manager) {
+		manager.connect();
+		String result = manager.send(constructMessage("ViewReturnedOrders", new ArrayList<String>()));
+		manager.disconnect();
+		
+		return parseOrders(result);
+	}
+	
+	/***
+	 * Constructs the list of DemoOrders, complete with their items, that are due in 7 days
+	 * @param manager
+	 * @return
+	 */
+	public List<DemoOrder> constructDueOrders(ConnectionManager manager) {
+		manager.connect();
+		String result = manager.send(constructMessage("ViewDueOrders", new ArrayList<String>()));
+		manager.disconnect();
+		
+		List<DemoOrder> foo = parseOrders(result);
+		for (DemoOrder bar : foo) {
+			manager.connect();
+			bar.setItems(this.constructItems(manager, bar.getOrderID()));
+			manager.disconnect();
+		}
+		
+		return foo;
 	}
 	
 	/***
@@ -200,6 +257,13 @@ public class ObjectConstructor {
 		return parseOrders(result);
 	}
 	
+	/***
+	 * Finds all DemoOrders that have an OrderItem 
+	 * whose serial number contains the substring specified by user input
+	 * @param manager
+	 * @param filter
+	 * @return
+	 */
 	public List<DemoOrder> filterOrders(ConnectionManager manager, String filter) {
 		List<String> parameters = new ArrayList<>();
 		parameters.add(filter);

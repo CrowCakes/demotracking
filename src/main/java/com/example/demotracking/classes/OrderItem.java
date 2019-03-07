@@ -9,7 +9,7 @@ public class OrderItem {
 	private String serial;
 	private String source;
 	private String remarks;
-	private String status;
+	private String status; //"Leased", "Returned"
 	private List<OrderItemPart> parts = null;
 	
 	public OrderItem(int itemID, String name, int quantity, String serial, String source, String remarks,
@@ -36,6 +36,14 @@ public class OrderItem {
 		this.remarks = remarks;
 		this.status = status;
 		this.parts = parts;
+	}
+	
+	@Override
+	/***
+	 * Returns the quantity and name of the OrderItem as a String
+	 */
+	public String toString() {
+		return String.format("%s x %s", quantity, name);
 	}
 
 	public int getItemID() {
