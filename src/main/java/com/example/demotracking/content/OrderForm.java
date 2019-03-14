@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.vaadin.dialogs.ConfirmDialog;
+
 import java.sql.Date;
 
 import com.example.demotracking.classes.ConnectionManager;
@@ -102,7 +105,20 @@ public class OrderForm extends OrderFormLayout {
 	
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
-		delete.addClickListener(e -> delete());
+		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
+				"Confirmation", "Delete this Schedule?", "Yes", "No",
+				new ConfirmDialog.Listener() {
+					public void onClose(ConfirmDialog dialog) {
+		        		if (dialog.isConfirmed()) {
+		        			delete();
+		        		}
+		        		else {
+		        			
+		        		}
+					}
+				}
+			)
+		);
 		cancel.addClickListener(e -> cancel());
 		
 		addSchedule.addClickListener(e -> {
@@ -241,6 +257,16 @@ public class OrderForm extends OrderFormLayout {
 	}
 	
 	private void delete() {
+		List<String> parameters = new ArrayList<>();
+		parameters.add(order.getOrderIDStr());
+		String query = constructor.constructMessage("DeleteOrder", parameters);
+		
+		manager.connect();
+		String result = manager.send(query);
+		manager.disconnect();
+		
+		Notification.show("Delete Order", result, Notification.Type.HUMANIZED_MESSAGE);
+		
 		parent.refreshView();
 		setVisible(false);
 		parent.setLayoutVisible();

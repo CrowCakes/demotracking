@@ -3,6 +3,8 @@ package com.example.demotracking.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vaadin.dialogs.ConfirmDialog;
+
 import com.example.demotracking.classes.ConnectionManager;
 import com.example.demotracking.classes.DemoOrder;
 import com.example.demotracking.classes.ObjectConstructor;
@@ -79,7 +81,20 @@ public class ItemPanel extends Panel {
 	
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
-		delete.addClickListener(e -> delete());
+		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
+				"Confirmation", "Delete this Schedule?", "Yes", "No",
+				new ConfirmDialog.Listener() {
+					public void onClose(ConfirmDialog dialog) {
+		        		if (dialog.isConfirmed()) {
+		        			delete();
+		        		}
+		        		else {
+		        			
+		        		}
+					}
+				}
+			)
+		);
 		cancel.addClickListener(e -> cancel());
 	}
 	
@@ -134,6 +149,16 @@ public class ItemPanel extends Panel {
 	}
 	
 	private void delete() {
+		List<String> parameters = new ArrayList<>();
+		parameters.add(orderItem.getItemIDStr());
+		String query = constructor.constructMessage("DeleteItem", parameters);
+		
+		manager.connect();
+		String result = manager.send(query);
+		manager.disconnect();
+		
+		Notification.show("Delete Item", result, Notification.Type.HUMANIZED_MESSAGE);
+		
 		parent.refreshForm();
 		setVisible(false);
 	}
