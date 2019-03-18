@@ -98,6 +98,8 @@ public class OrderForm extends OrderFormLayout {
 		binder.bind(rfd, DemoOrder::getRfd, DemoOrder::setRfd);
 		binder.bind(ard, DemoOrder::getArd, DemoOrder::setArd);
 		binder.bind(accountManager, DemoOrder::getAccountManager, DemoOrder::setAccountManager);
+		binder.bind(po, DemoOrder::getPo, DemoOrder::setPo);
+		binder.bind(rr, DemoOrder::getRr, DemoOrder::setRr);
 		binder.bind(status, DemoOrder::getStatus, DemoOrder::setStatus);
 		
 		this.binder.bindInstanceFields(this);
@@ -151,7 +153,8 @@ public class OrderForm extends OrderFormLayout {
 					new OrderItemPart(
 							0, 
 							items.asSingleSelect().getSelectedItem().get().getItemID(), 
-							""));
+							"",
+							"xxxxxx"));
 		});
 		
 		addPart.setEnabled(false);
@@ -217,6 +220,8 @@ public class OrderForm extends OrderFormLayout {
 			parameters.add(rfd.getValue());
 			parameters.add(ard.getValue());
 			parameters.add(accountManager.getValue());
+			parameters.add(po.getValue());
+			parameters.add(rr.getValue());
 			parameters.add(status.getValue());
 			
 			String query = constructor.constructMessage("InsertNewOrder", parameters);
@@ -235,6 +240,8 @@ public class OrderForm extends OrderFormLayout {
 			parameters.add(rfd.getValue());
 			parameters.add(ard.getValue());
 			parameters.add(accountManager.getValue());
+			parameters.add(po.getValue());
+			parameters.add(rr.getValue());
 			parameters.add(status.getValue());
 			
 			String query = constructor.constructMessage("EditOrder", parameters);

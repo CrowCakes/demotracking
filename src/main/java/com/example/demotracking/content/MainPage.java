@@ -155,6 +155,6 @@ public class MainPage extends MainPageLayout {
 	}
 	
 	private DemoOrder newOrder() {
-		return new DemoOrder(0, "", "", "", "", "Active");
+		return new DemoOrder(0, "", "", "", "", "", "", "Active");
 	}
 }

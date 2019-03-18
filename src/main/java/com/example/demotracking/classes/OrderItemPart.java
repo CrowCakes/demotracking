@@ -4,12 +4,14 @@ public class OrderItemPart {
 	private int listID;
 	private int itemID;
 	private String name;
+	private String serial;
 	
-	public OrderItemPart(int listID, int itemID, String name) {
+	public OrderItemPart(int listID, int itemID, String name, String serial) {
 		super();
 		this.listID = listID;
 		this.itemID = itemID;
 		this.name = name;
+		this.serial = serial;
 	}
 
 	public int getListID() {
@@ -50,6 +52,14 @@ public class OrderItemPart {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSerial() {
+		return serial;
+	}
+
+	public void setSerial(String serial) {
+		this.serial = serial;
 	}
 	
 	

@@ -68,7 +68,7 @@ public class ItemPanel extends Panel {
 	}
 	
 	private void bind_fields() {
-		itemStatus.setItems("Active", "Returned");
+		itemStatus.setItems("Active", "Returned", "Purchased");
 		
 		binder.bind(name, OrderItem::getName, OrderItem::setName);
 		binder.bind(quantity, OrderItem::getQuantityStr, OrderItem::setQuantity);

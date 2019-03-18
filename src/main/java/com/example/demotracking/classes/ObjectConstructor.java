@@ -44,15 +44,17 @@ public class ObjectConstructor {
 						foobar.get(2),
 						foobar.get(3),
 						foobar.get(4),
-						foobar.get(5)
+						foobar.get(5),
+						foobar.get(6),
+						foobar.get(7)
 						);
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(6)),
+								Integer.parseInt(foobar.get(8)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(7)),
-								Date.valueOf(foobar.get(8)),
-								foobar.get(9)
+								Date.valueOf(foobar.get(9)),
+								Date.valueOf(foobar.get(10)),
+								foobar.get(11)
 								)
 						);
 			}
@@ -62,11 +64,11 @@ public class ObjectConstructor {
 			else if (previous.getOrderID() == Integer.parseInt(foobar.get(0))) {
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(6)),
+								Integer.parseInt(foobar.get(8)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(7)),
-								Date.valueOf(foobar.get(8)),
-								foobar.get(9)
+								Date.valueOf(foobar.get(9)),
+								Date.valueOf(foobar.get(10)),
+								foobar.get(11)
 								)
 						);
 			}
@@ -91,15 +93,17 @@ public class ObjectConstructor {
 						foobar.get(2),
 						foobar.get(3),
 						foobar.get(4),
-						foobar.get(5)
+						foobar.get(5),
+						foobar.get(6),
+						foobar.get(7)
 						);
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(6)),
+								Integer.parseInt(foobar.get(8)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(7)),
-								Date.valueOf(foobar.get(8)),
-								foobar.get(9)
+								Date.valueOf(foobar.get(9)),
+								Date.valueOf(foobar.get(10)),
+								foobar.get(11)
 								)
 						);
 			}
@@ -165,7 +169,8 @@ public class ObjectConstructor {
 							new OrderItemPart(
 									Integer.parseInt(foobar.get(0)),
 									Integer.parseInt(foobar.get(1)),
-									foobar.get(2)
+									foobar.get(2),
+									foobar.get(3)
 									)
 							);
 				}

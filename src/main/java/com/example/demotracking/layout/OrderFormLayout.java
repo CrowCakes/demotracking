@@ -23,8 +23,13 @@ public class OrderFormLayout extends Panel {
 	protected TextField rfd = new TextField("RFD#");
 	protected TextField ard = new TextField("ARD#");
 	protected TextField accountManager = new TextField("Account Manager");
+	protected TextField po = new TextField("Pullout#");
+	protected TextField rr = new TextField("RR#");
 	protected NativeSelect<String> status = new NativeSelect<>("Status");
-	protected HorizontalLayout orderInfo = new HorizontalLayout(orderID, client, rfd, ard, accountManager, status);
+	protected VerticalLayout orderInfo = new VerticalLayout(
+			new HorizontalLayout(orderID, client, rfd, ard, accountManager),
+			new HorizontalLayout(status, po, rr)
+			);
 	
 	protected Grid<OrderDuration> schedule = new Grid<>();
 	protected Grid<OrderItem> items = new Grid<>();

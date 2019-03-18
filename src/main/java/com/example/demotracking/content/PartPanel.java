@@ -18,6 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PartPanel extends Panel {
 	protected TextField partName = new TextField("Part");
+	protected TextField serial = new TextField("Serial#");
 	
 	protected Button save = new Button("Save");
 	protected Button cancel = new Button("Cancel");
@@ -41,7 +42,7 @@ public class PartPanel extends Panel {
 
 		this.save.setStyleName("primary");
 		
-		setContent(new VerticalLayout(partName, orderButtons));
+		setContent(new VerticalLayout(partName, serial, orderButtons));
 		
 		setVisible(false);
 	}
@@ -75,6 +76,7 @@ public class PartPanel extends Panel {
 
 	private void bind_fields() {
 		binder.bind(partName, OrderItemPart::getName, OrderItemPart::setName);
+		binder.bind(serial, OrderItemPart::getSerial, OrderItemPart::setSerial);
 		this.binder.bindInstanceFields(this);
 	}
 	
