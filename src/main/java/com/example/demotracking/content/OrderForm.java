@@ -195,6 +195,7 @@ public class OrderForm extends OrderFormLayout {
             	
             	//populate the grid of parts for the selected item
             	if (event.getValue().getParts() != null) parts.setItems(event.getValue().getParts());
+            	else parts.setItems(Collections.emptyList());
             	
             	addPart.setEnabled(true);
             	//keep parts hidden still

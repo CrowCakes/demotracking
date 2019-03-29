@@ -86,6 +86,7 @@ public class PartPanel extends Panel {
 			List<String> parameters = new ArrayList<>();
 			parameters.add(orderItemPart.getItemIDStr());
 			parameters.add(partName.getValue());
+			parameters.add(serial.getValue());
 			
 			String query = constructor.constructMessage("InsertNewUnitPart", parameters);
 			
@@ -101,6 +102,7 @@ public class PartPanel extends Panel {
 			parameters.add(orderItemPart.getListIDStr());
 			parameters.add(orderItemPart.getItemIDStr());
 			parameters.add(partName.getValue());
+			parameters.add(serial.getValue());
 			
 			String query = constructor.constructMessage("EditUnitPart", parameters);
 			

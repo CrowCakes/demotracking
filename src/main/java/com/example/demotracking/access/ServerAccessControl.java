@@ -42,8 +42,11 @@ implements AccessControl {
 			
 			for ( Entry entry : cursor )
 		    {
-				if (entry.get("mailNickname") != null 
-						&& entry.get("mailNickname").contains(username.substring(0, indexAt))) {
+				//System.out.println(entry.get("userPrincipalName"));
+				if ((entry.get("mailNickname") != null 
+					&& entry.get("mailNickname").contains(username.substring(0, indexAt))) 
+						|| (entry.get("userPrincipalName") != null 
+							&& entry.get("userPrincipalName").toString().contains(username.substring(0, indexAt)))) {
 					System.out.println("Found it!");
 					
 					//success
