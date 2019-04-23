@@ -39,22 +39,23 @@ public class ObjectConstructor {
 			//initial condition
 			if (previous == null) {
 				previous = new DemoOrder(
-						Integer.parseInt(foobar.get(0)),
-						foobar.get(1),
-						foobar.get(2),
-						foobar.get(3),
-						foobar.get(4),
-						foobar.get(5),
-						foobar.get(6),
-						foobar.get(7)
+						Integer.parseInt(foobar.get(0)), // orderid
+						foobar.get(1),	//client
+						foobar.get(2),	//rfd
+						foobar.get(3),	//ard
+						foobar.get(4),	//am
+						foobar.get(5),	//po
+						foobar.get(6),	//rr
+						foobar.get(7),	//rts
+						foobar.get(8)	//status
 						);
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(8)),
+								Integer.parseInt(foobar.get(9)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(9)),
 								Date.valueOf(foobar.get(10)),
-								foobar.get(11)
+								Date.valueOf(foobar.get(11)),
+								foobar.get(12)
 								)
 						);
 			}
@@ -64,11 +65,11 @@ public class ObjectConstructor {
 			else if (previous.getOrderID() == Integer.parseInt(foobar.get(0))) {
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(8)),
+								Integer.parseInt(foobar.get(9)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(9)),
 								Date.valueOf(foobar.get(10)),
-								foobar.get(11)
+								Date.valueOf(foobar.get(11)),
+								foobar.get(12)
 								)
 						);
 			}
@@ -88,22 +89,23 @@ public class ObjectConstructor {
 				System.out.println("-- nothing follows --\n");
 				*/
 				previous = new DemoOrder(
-						Integer.parseInt(foobar.get(0)),
-						foobar.get(1),
-						foobar.get(2),
-						foobar.get(3),
-						foobar.get(4),
-						foobar.get(5),
-						foobar.get(6),
-						foobar.get(7)
+						Integer.parseInt(foobar.get(0)), // orderid
+						foobar.get(1),	//client
+						foobar.get(2),	//rfd
+						foobar.get(3),	//ard
+						foobar.get(4),	//am
+						foobar.get(5),	//po
+						foobar.get(6),	//rr
+						foobar.get(7),	//rts
+						foobar.get(8)	//status
 						);
 				previous.addSchedule(
 						new OrderDuration(
-								Integer.parseInt(foobar.get(8)),
+								Integer.parseInt(foobar.get(9)),
 								previous.getOrderID(),
-								Date.valueOf(foobar.get(9)),
 								Date.valueOf(foobar.get(10)),
-								foobar.get(11)
+								Date.valueOf(foobar.get(11)),
+								foobar.get(12)
 								)
 						);
 			}

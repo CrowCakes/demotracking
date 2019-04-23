@@ -14,6 +14,7 @@ public class DemoOrder {
 	private String accountManager;
 	private String po;
 	private String rr;
+	private String rts;
 	private String status; //"Active", "Internal", "Pullout", "Returned"
 	private List<OrderDuration> schedule;
 	private List<OrderItem> items;
@@ -27,7 +28,8 @@ public class DemoOrder {
 	 * @param accountManager
 	 * @param status
 	 */
-	public DemoOrder(int orderID, String client, String rfd, String ard, String accountManager, String po, String rr, String status) {
+	public DemoOrder(int orderID, String client, String rfd, String ard, String accountManager, String po, String rr, 
+			String rts, String status) {
 		super();
 		this.orderID = orderID;
 		this.client = client;
@@ -36,12 +38,14 @@ public class DemoOrder {
 		this.accountManager = accountManager;
 		this.po = po;
 		this.rr = rr;
+		this.rts = rts;
 		this.status = status;
 		this.schedule = new ArrayList<>();
 		this.items = new ArrayList<>();
 	}
 
-	public DemoOrder(int orderID, String client, String rfd, String ard, String accountManager, String po, String rr, String status,
+	public DemoOrder(int orderID, String client, String rfd, String ard, String accountManager, String po, String rr, 
+			String rts, String status,
 			List<OrderDuration> schedule, List<OrderItem> items) {
 		super();
 		this.orderID = orderID;
@@ -51,6 +55,7 @@ public class DemoOrder {
 		this.accountManager = accountManager;
 		this.po = po;
 		this.rr = rr;
+		this.rts = rts;
 		this.status = status;
 		this.schedule = schedule;
 		this.items = items;
@@ -118,6 +123,14 @@ public class DemoOrder {
 
 	public void setRr(String rr) {
 		this.rr = rr;
+	}
+
+	public String getRts() {
+		return rts;
+	}
+
+	public void setRts(String rts) {
+		this.rts = rts;
 	}
 
 	public String getStatus() {

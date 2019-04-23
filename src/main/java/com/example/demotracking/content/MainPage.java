@@ -84,7 +84,7 @@ public class MainPage extends MainPageLayout {
 		);
 		
 		openReport.addClickListener(e -> {
-			Notification.show("Notice", "Please wait while your report is being generated", Notification.Type.TRAY_NOTIFICATION);
+			Notification.show("Notice", "Please refresh the page after the report is generated", Notification.Type.TRAY_NOTIFICATION);
 		});
 		OnDemandFileDownloader.OnDemandStreamResource resource = new  OnDemandFileDownloader.OnDemandStreamResource()
         {
@@ -155,6 +155,6 @@ public class MainPage extends MainPageLayout {
 	}
 	
 	private DemoOrder newOrder() {
-		return new DemoOrder(0, "", "", "", "", "", "", "Active");
+		return new DemoOrder(0, "", "", "", "", "", "", "", "Active");
 	}
 }

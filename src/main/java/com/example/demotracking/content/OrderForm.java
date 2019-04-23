@@ -70,13 +70,17 @@ public class OrderForm extends OrderFormLayout {
 			this.order.setItems(constructor.constructItems(manager, this.order.getOrderID()));
 			items.setItems(this.order.getItems());
 		}
+		else {
+			this.order.setItems(Collections.emptyList());
+			items.setItems(Collections.emptyList());
+		}
 		
 		binder.setBean(this.order);
 		
 		//if the order is new do not let user add schedules, parts, or items
 		addSchedule.setEnabled(this.order.getOrderID() != 0);
 		addItem.setEnabled(this.order.getOrderID() != 0);
-		//addPart.setEnabled(this.order.getOrderID() != 0);
+		addPart.setEnabled(this.order.getOrderID() != 0);
 		
 		schedulePanel.setVisible(false);
 		itemPanel.setVisible(false);
@@ -100,6 +104,7 @@ public class OrderForm extends OrderFormLayout {
 		binder.bind(accountManager, DemoOrder::getAccountManager, DemoOrder::setAccountManager);
 		binder.bind(po, DemoOrder::getPo, DemoOrder::setPo);
 		binder.bind(rr, DemoOrder::getRr, DemoOrder::setRr);
+		binder.bind(rts, DemoOrder::getRts, DemoOrder::setRts);
 		binder.bind(status, DemoOrder::getStatus, DemoOrder::setStatus);
 		
 		this.binder.bindInstanceFields(this);
@@ -142,7 +147,7 @@ public class OrderForm extends OrderFormLayout {
 			schedulePanel.setVisible(false);
 			partPanel.setVisible(false);
 			
-			itemPanel.setItem(new OrderItem(0, "", 0, "", "", "", ""));
+			itemPanel.setItem(new OrderItem(0, "", 0, "", "", "", "Active"));
 		});
 		addPart.addClickListener(e -> {
 			parts.deselectAll();
@@ -154,7 +159,7 @@ public class OrderForm extends OrderFormLayout {
 							0, 
 							items.asSingleSelect().getSelectedItem().get().getItemID(), 
 							"",
-							"xxxxxx"));
+							"n/a"));
 		});
 		
 		addPart.setEnabled(false);
@@ -223,6 +228,7 @@ public class OrderForm extends OrderFormLayout {
 			parameters.add(accountManager.getValue());
 			parameters.add(po.getValue());
 			parameters.add(rr.getValue());
+			parameters.add(rts.getValue());
 			parameters.add(status.getValue());
 			
 			String query = constructor.constructMessage("InsertNewOrder", parameters);
@@ -243,6 +249,7 @@ public class OrderForm extends OrderFormLayout {
 			parameters.add(accountManager.getValue());
 			parameters.add(po.getValue());
 			parameters.add(rr.getValue());
+			parameters.add(rts.getValue());
 			parameters.add(status.getValue());
 			
 			String query = constructor.constructMessage("EditOrder", parameters);

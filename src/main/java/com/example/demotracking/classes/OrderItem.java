@@ -9,7 +9,7 @@ public class OrderItem {
 	private String serial;
 	private String source;
 	private String remarks;
-	private String status; //"Leased", "Returned"
+	private String status; //"Active", "Returned", "Purchased
 	private List<OrderItemPart> parts = null;
 	
 	public OrderItem(int itemID, String name, int quantity, String serial, String source, String remarks,
