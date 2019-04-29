@@ -32,6 +32,12 @@ public class PartPanel extends Panel {
 	
 	private OrderItemPart orderItemPart;
 	
+	/**
+	 * Prepares the UI elements for this form.
+	 * @param parent
+	 * @param manager
+	 * @param constructor
+	 */
 	public PartPanel(OrderForm parent, ConnectionManager manager, ObjectConstructor constructor) {
 		this.parent = parent;
 		this.manager = manager;
@@ -47,6 +53,10 @@ public class PartPanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Sets the given ItemPart to be edited by this form.
+	 * @param part
+	 */
 	public void setPart(OrderItemPart part) {
 		this.orderItemPart = part;
 		
@@ -55,6 +65,9 @@ public class PartPanel extends Panel {
 		setVisible(true);
 	}
 	
+	/**
+	 * Prepares the functions triggered by pressing the various buttons on the form.
+	 */
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
 		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
@@ -74,12 +87,18 @@ public class PartPanel extends Panel {
 		cancel.addClickListener(e -> cancel());
 	}
 
+	/**
+	 * Prepares the UI elements to edit ItemParts.
+	 */
 	private void bind_fields() {
 		binder.bind(partName, OrderItemPart::getName, OrderItemPart::setName);
 		binder.bind(serial, OrderItemPart::getSerial, OrderItemPart::setSerial);
 		this.binder.bindInstanceFields(this);
 	}
 	
+	/**
+	 * Sends the entered ItemPart data to be inserted/edited into the database.
+	 */
 	private void save() {
 		//a new part to add
 		if (orderItemPart.getListID() == 0) {
@@ -117,10 +136,16 @@ public class PartPanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Hides the form.
+	 */
 	private void cancel() {
 		setVisible(false);
 	}
 	
+	/**
+	 * Sends the ItemPart's ID for deletion from database.
+	 */
 	private void delete() {
 		List<String> parameters = new ArrayList<>();
 		parameters.add(orderItemPart.getListIDStr());
@@ -134,10 +159,5 @@ public class PartPanel extends Panel {
 		
 		parent.refreshForm();
 		setVisible(false);
-	}
-	
-	private boolean isDigit(String s) {
-		if (s.matches("[0-9]+")) return true;
-		else return false;
 	}
 }

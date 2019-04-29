@@ -36,6 +36,12 @@ public class SchedulePanel extends Panel {
 	
 	private OrderDuration orderDuration;
 	
+	/**
+	 * Prepares the UI elements for this form.
+	 * @param parent
+	 * @param manager
+	 * @param constructor
+	 */
 	public SchedulePanel(OrderForm parent, ConnectionManager manager, ObjectConstructor constructor) {
 		this.parent = parent;
 		this.manager = manager;
@@ -51,6 +57,10 @@ public class SchedulePanel extends Panel {
 		setVisible(false);
 	}
 
+	/**
+	 * Sets the given OrderDuration to be edited by this form.
+	 * @param schedule
+	 */
 	public void setSchedule(OrderDuration schedule) {
 		this.orderDuration = schedule;
 		binder.setBean(this.orderDuration);
@@ -59,6 +69,9 @@ public class SchedulePanel extends Panel {
 		setVisible(true);
 	}
 	
+	/**
+	 * Prepares the functions triggered by pressing the various buttons on the form.
+	 */
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
 		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
@@ -78,6 +91,9 @@ public class SchedulePanel extends Panel {
 		cancel.addClickListener(e -> cancel());
 	}
 	
+	/**
+	 * Prepares the UI elements to edit OrderDurations.
+	 */
 	private void bind_fields() {
 		binder.bind(startDate, OrderDuration::getStartDateLocal, OrderDuration::setStartDate);
 		binder.bind(endDate, OrderDuration::getEndDateLocal, OrderDuration::setEndDate);
@@ -85,6 +101,9 @@ public class SchedulePanel extends Panel {
 		this.binder.bindInstanceFields(this);
 	}
 	
+	/**
+	 * Sends the entered OrderSchedule data to be inserted/edited into the database.
+	 */
 	private void save() {
 		//a new schedule
 		if (orderDuration.getListID() == 0) {
@@ -124,10 +143,16 @@ public class SchedulePanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Hides the form.
+	 */
 	private void cancel() {
 		setVisible(false);
 	}
 	
+	/**
+	 * Sends the OrderSchedule's ID for deletion from database.
+	 */
 	private void delete() {
 		List<String> parameters = new ArrayList<>();
 		parameters.add(orderDuration.getListIDStr());
@@ -142,9 +167,5 @@ public class SchedulePanel extends Panel {
 		parent.refreshForm();
 		setVisible(false);
 	}
-	
-	private boolean isDigit(String s) {
-		if (s.matches("[0-9]+")) return true;
-		else return false;
-	}
+
 }

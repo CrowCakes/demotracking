@@ -15,6 +15,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ReportGenerator {
+	/**
+	 * Queries server for DemoOrders nearing or pass their Due Date, then generates a report given the data.
+	 * @param manager
+	 * @return
+	 */
 	public byte[] generateReport(ConnectionManager manager) {
 		ObjectConstructor foo = new ObjectConstructor();
 		
@@ -25,6 +30,11 @@ public class ReportGenerator {
 		return formatReport(data);
 	}
 	
+	/**
+	 * Formats a .xls file given the list of DemoOrders.
+	 * @param data
+	 * @return
+	 */
 	private byte[] formatReport(List<DemoOrder> data) {
 		int maxNumChar = ((int)(15 * 1.14388)) * 256;
 		int NUMBER_OF_COLUMNS = 10;

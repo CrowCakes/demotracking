@@ -15,6 +15,7 @@ import com.example.demotracking.classes.ReportGenerator;
 import com.example.demotracking.layout.MainPageLayout;
 import com.example.demotracking.classes.OnDemandFileDownloader;
 import com.vaadin.shared.ui.ValueChangeMode;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
@@ -26,13 +27,24 @@ public class MainPage extends MainPageLayout {
 	
 	private OrderForm orderForm;
 	private VerticalLayout finalLayout;
+	
+	int count = 0;
+	int MAX_LIMIT = 20;
+	int limit = MAX_LIMIT;
+	int offset = 0;
 
+	/**
+	 * Prepares the UI elements for the page.
+	 * @param user
+	 * @param constructor
+	 */
 	public MainPage(String user, ObjectConstructor constructor) {
 		this.constructor = constructor;
 		orderForm = new OrderForm(this, this.constructor);
 		
 		prepareButtons();
 		prepareGrid(user);
+		preparePagination();
 		
 		finalLayout = new VerticalLayout(layout, new VerticalLayout(orderForm));
 		finalLayout.setMargin(false);
@@ -40,6 +52,37 @@ public class MainPage extends MainPageLayout {
 		refreshView();
 	}
 	
+	/**
+	 * Prepares the buttons and display to be used for the page display system.
+	 */
+	private void preparePagination() {
+		Button previous = new Button(String.format("Previous %d", MAX_LIMIT)); 
+		Button next = new Button(String.format("Next %d", MAX_LIMIT));
+		
+		previous.addClickListener(e -> {
+        	offset = (offset - limit < 0) ? 0 : offset - limit;
+        	limit = (offset + limit > count) ? count - offset : limit;
+        	displayNew(offset, limit);
+        	
+        	display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
+        	limit = MAX_LIMIT;
+        });
+		next.addClickListener(e -> {
+        	offset = (offset + limit > count) ? offset : offset + limit;
+        	limit = (offset + limit > count) ? count - offset : limit;
+        	displayNew(offset, limit);
+        	
+        	display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
+        	limit = MAX_LIMIT;
+        });
+		
+		pagination.addComponents(previous, display_count, next);
+	}
+	
+	/**
+	 * Prepares the filter and the display grid, as well as grid interaction with the OrderForm.
+	 * @param user
+	 */
 	private void prepareGrid(String user) {
 		display_orders.addColumn(DemoOrder::getClient).setCaption("Client");
 		display_orders.addColumn(DemoOrder::getRfd).setCaption("RFD");
@@ -49,7 +92,7 @@ public class MainPage extends MainPageLayout {
 		display_orders.addColumn(DemoOrder::getLatestStartDate).setCaption("Start Date");
 		display_orders.addColumn(DemoOrder::getLatestDueDate).setCaption("Due Date");
 		
-		display_orders.setHeight("500px");
+		display_orders.setHeight("475px");
 		display_orders.setWidth("1125px");
 		display_orders.setSelectionMode(Grid.SelectionMode.SINGLE);
 		
@@ -66,10 +109,16 @@ public class MainPage extends MainPageLayout {
         }
 		
 		serialFilter.setPlaceholder("Search by Unit Serial#");
-		serialFilter.addValueChangeListener(e -> filterView());
+		serialFilter.addValueChangeListener(e -> {
+			if (!serialFilter.getValue().isEmpty()) filterView();
+			else refreshView();
+		});
 		serialFilter.setValueChangeMode(ValueChangeMode.LAZY);
 	}
 	
+	/**
+	 * Prepares the functions that will trigger when the various UI buttons are pressed.
+	 */
 	private void prepareButtons() {
 		outstandingOrders.addClickListener(e -> refreshView());
 		internalOrders.addClickListener(e -> refreshViewInternal());
@@ -108,6 +157,9 @@ public class MainPage extends MainPageLayout {
          downloader.extend(openReport);
 	}
 	
+	/**
+	 * Refreshes the display grid with DemoOrders whose Serial# contains the user input.
+	 */
 	private void filterView() {
 		List<DemoOrder> update = new ArrayList<>();
 		update = constructor.filterOrders(manager, serialFilter.getValue());
@@ -115,45 +167,93 @@ public class MainPage extends MainPageLayout {
 		display_orders.setItems(update);
 	}
 	
+	/**
+	 * Refreshes the display grid with the list of active DemoOrders.
+	 */
 	public void refreshView() {
 		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructOrders(manager);
+		offset = 0;
+		
+		count = constructor.getOrderCount(manager);
+		
+		limit = (offset + limit > count) ? count - offset : limit;
+		
+		update = constructor.constructOrders(manager, offset, limit);
+		
+		display_orders.setItems(update);
+		display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
+		pagination.setVisible(true);
+		limit = MAX_LIMIT;
+	}
+	
+	/** 
+	 * Displays the next/previous page of active DemoOrders.
+	 * @param offset
+	 * @param limit
+	 */
+	private void displayNew(int offset, int limit) {
+		List<DemoOrder> update = new ArrayList<>();
+		
+		update = constructor.constructOrders(manager, offset, limit);
 		
 		display_orders.setItems(update);
 	}
 	
+	/**
+	 * Refreshes the display grid with the list of in-house DemoOrders.
+	 */
 	public void refreshViewInternal() {
 		List<DemoOrder> update = new ArrayList<>();
 		update = constructor.constructInHouseOrders(manager);
 		
 		display_orders.setItems(update);
+		pagination.setVisible(false);
 	}
 	
+	/**
+	 * Refreshes the display grid with the list of DemoOrders due in 7 days or less.
+	 */
 	public void refreshViewDue() {
 		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructDueOrders(manager);
+		update = constructor.constructDueOrdersNoItems(manager);
 		
 		display_orders.setItems(update);
+		pagination.setVisible(false);
 	}
 	
+	/**
+	 * Refreshes the display grid with the list of DemoOrders being pulled-out from the customer.
+	 */
 	public void refreshViewPull() {
 		List<DemoOrder> update = new ArrayList<>();
 		update = constructor.constructPullOutOrders(manager);
 		
 		display_orders.setItems(update);
+		pagination.setVisible(false);
 	}
 	
+	/**
+	 * Refreshes the display grid with the list of DemoOrders that have been completed.
+	 */
 	public void refreshViewReturned() {
 		List<DemoOrder> update = new ArrayList<>();
 		update = constructor.constructReturnedOrders(manager);
 		
 		display_orders.setItems(update);
+		pagination.setVisible(false);
 	}
 	
+	/**
+	 * Sets the current page to be visible.
+	 */
 	public void setLayoutVisible() {
 		layout.setVisible(true);
 	}
 	
+	/**
+	 * Returns a dummy DemoOrder. To be used when making a new DemoOrder.
+	 * @return
+	 */
 	private DemoOrder newOrder() {
 		return new DemoOrder(0, "", "", "", "", "", "", "", "Active");
 	}

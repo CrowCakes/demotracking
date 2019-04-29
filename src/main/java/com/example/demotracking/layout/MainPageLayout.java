@@ -6,6 +6,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -22,8 +23,11 @@ public class MainPageLayout extends CssLayout implements View {
 	protected Button addOrder = new Button("Add New");
 	protected Button openReport = new Button("Generate Due Date Report");
 	
+	protected HorizontalLayout pagination = new HorizontalLayout();
+	protected Label display_count = new Label("");
+	
 	protected HorizontalLayout buttons = new HorizontalLayout(serialFilter, addOrder, openReport);
 	protected HorizontalLayout viewButtons = new HorizontalLayout(outstandingOrders,
 			internalOrders, dueOrders, pullOutOrders, returnedOrders);
-	protected VerticalLayout layout = new VerticalLayout(buttons, display_orders, viewButtons);
+	protected VerticalLayout layout = new VerticalLayout(buttons, display_orders, viewButtons, pagination);
 }

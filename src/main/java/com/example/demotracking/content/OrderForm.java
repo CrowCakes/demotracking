@@ -30,6 +30,11 @@ public class OrderForm extends OrderFormLayout {
 	private Binder<DemoOrder> binder = new Binder<>(DemoOrder.class);
 	private MainPage parent;
 	
+	/**
+	 * Prepares the UI elements for this form.
+	 * @param parent
+	 * @param constructor
+	 */
 	public OrderForm(MainPage parent, ObjectConstructor constructor) {
 		this.parent = parent;
 		this.constructor = constructor;
@@ -60,6 +65,10 @@ public class OrderForm extends OrderFormLayout {
 		setVisible(false);
 	}
 
+	/**
+	 * Sets the given DemoOrder to be edited by this form.
+	 * @param order
+	 */
 	public void setOrder(DemoOrder order) {
 		this.order = order;
 		
@@ -93,6 +102,9 @@ public class OrderForm extends OrderFormLayout {
 		setVisible(true);
 	}
 	
+	/**
+	 * Prepares the UI elements to edit DemoOrders.
+	 */
 	private void bind_fields() {
 		orderID.setEnabled(false);
 		status.setItems("Active", "Internal", "Pullout", "Returned");
@@ -110,6 +122,9 @@ public class OrderForm extends OrderFormLayout {
 		this.binder.bindInstanceFields(this);
 	}
 	
+	/**
+	 * Prepares the functions triggered by pressing the various buttons on the form.
+	 */
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
 		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
@@ -165,6 +180,9 @@ public class OrderForm extends OrderFormLayout {
 		addPart.setEnabled(false);
 	}
 	
+	/**
+	 * Prepares the display grids and their interactions with each other and the other subforms.
+	 */
 	private void prepare_grids() {
 		schedule.setWidth("300px");
 		schedule.addColumn(OrderDuration::getStartDate).setCaption("Start Date");
@@ -218,6 +236,9 @@ public class OrderForm extends OrderFormLayout {
 		});
 	}
 	
+	/**
+	 * Sends the entered DemoOrder data to be inserted/edited into the database.
+	 */
 	private void save() {
 		//it's a new order
 		if (order.getOrderID() == 0) {
@@ -266,11 +287,17 @@ public class OrderForm extends OrderFormLayout {
 		parent.setLayoutVisible();
 	}
 	
+	/**
+	 * Hides the form and reveals the main page.
+	 */
 	private void cancel() {
 		setVisible(false);
 		parent.setLayoutVisible();
 	}
 	
+	/**
+	 * Sends the DemoOrder's ID for deletion from database.
+	 */
 	private void delete() {
 		List<String> parameters = new ArrayList<>();
 		parameters.add(order.getOrderIDStr());
@@ -287,18 +314,29 @@ public class OrderForm extends OrderFormLayout {
 		parent.setLayoutVisible();
 	}
 	
+	/**
+	 * Checks if the given string contains only digits 0 to 9.
+	 * @param s
+	 * @return
+	 */
 	private boolean isDigit(String s) {
 		if (s.matches("[0-9]+")) return true;
 		else return false;
 	}
 
-	
+	/**
+	 * Refreshes the given Order's data.
+	 */
 	public void refreshForm() {
 		this.setOrder(
 				constructor.findOrder(manager, order.getOrderID()).get(0)
 				);
 	}
 	
+	/**
+	 * Returns the form's current Order.
+	 * @return
+	 */
 	public int getOrderID() {
 		return order.getOrderID();
 	}

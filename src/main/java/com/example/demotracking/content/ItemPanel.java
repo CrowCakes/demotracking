@@ -45,6 +45,12 @@ public class ItemPanel extends Panel {
 
 	private OrderItem orderItem;
 	
+	/**
+	 * Prepares the UI elements for this form.
+	 * @param parent
+	 * @param manager
+	 * @param constructor
+	 */
 	public ItemPanel(OrderForm parent, ConnectionManager manager, ObjectConstructor constructor) {
 		this.parent = parent;
 		this.manager = manager;
@@ -60,6 +66,10 @@ public class ItemPanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Sets the given OrderItem to be edited by this form.
+	 * @param item
+	 */
 	public void setItem(OrderItem item) {
 		this.orderItem = item;
 		
@@ -67,6 +77,9 @@ public class ItemPanel extends Panel {
 		setVisible(true);
 	}
 	
+	/**
+	 * Prepares the UI elements to edit OrderItems.
+	 */
 	private void bind_fields() {
 		itemStatus.setItems("Active", "Returned", "Purchased");
 		
@@ -79,6 +92,9 @@ public class ItemPanel extends Panel {
 		this.binder.bindInstanceFields(this);
 	}
 	
+	/**
+	 * Prepares the functions triggered by pressing the various buttons on the form.
+	 */
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
 		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
@@ -98,6 +114,9 @@ public class ItemPanel extends Panel {
 		cancel.addClickListener(e -> cancel());
 	}
 	
+	/**
+	 * Sends the entered OrderItem data to be inserted/edited into the database.
+	 */
 	private void save() {
 		if (!validate()) Notification.show("Error", "Quantity must be a whole number", Notification.Type.ERROR_MESSAGE);
 		
@@ -144,10 +163,16 @@ public class ItemPanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Hides the form.
+	 */
 	private void cancel() {
 		setVisible(false);
 	}
 	
+	/**
+	 * Sends the OrderItem's ID for deletion from database.
+	 */
 	private void delete() {
 		List<String> parameters = new ArrayList<>();
 		parameters.add(orderItem.getItemIDStr());
@@ -163,11 +188,20 @@ public class ItemPanel extends Panel {
 		setVisible(false);
 	}
 	
+	/**
+	 * Checks if the given String contains only digits 0 to 9.
+	 * @param s
+	 * @return
+	 */
 	private boolean isDigit(String s) {
 		if (s.matches("[0-9]+")) return true;
 		else return false;
 	}
 	
+	/**
+	 * Checks if the Quantity field contains only digits.
+	 * @return
+	 */
 	private boolean validate() {
 		if (!isDigit(quantity.getValue())) return false;
 		return true;
