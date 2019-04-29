@@ -28,6 +28,15 @@ public class MainPage extends MainPageLayout {
 	private OrderForm orderForm;
 	private VerticalLayout finalLayout;
 	
+	/*
+	 * 0 = Outstanding
+	 * 1 = Internal
+	 * 2 = Due
+	 * 3 = Pullout
+	 * 4 = Returned
+	 */
+	int current_view = 0;
+	
 	int count = 0;
 	int MAX_LIMIT = 20;
 	int limit = MAX_LIMIT;
@@ -49,7 +58,7 @@ public class MainPage extends MainPageLayout {
 		finalLayout = new VerticalLayout(layout, new VerticalLayout(orderForm));
 		finalLayout.setMargin(false);
 		addComponents(finalLayout);
-		refreshView();
+		refreshView(0);
 	}
 	
 	/**
@@ -62,7 +71,7 @@ public class MainPage extends MainPageLayout {
 		previous.addClickListener(e -> {
         	offset = (offset - limit < 0) ? 0 : offset - limit;
         	limit = (offset + limit > count) ? count - offset : limit;
-        	displayNew(offset, limit);
+        	displayNew(offset, limit, current_view);
         	
         	display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
         	limit = MAX_LIMIT;
@@ -70,7 +79,7 @@ public class MainPage extends MainPageLayout {
 		next.addClickListener(e -> {
         	offset = (offset + limit > count) ? offset : offset + limit;
         	limit = (offset + limit > count) ? count - offset : limit;
-        	displayNew(offset, limit);
+        	displayNew(offset, limit, current_view);
         	
         	display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
         	limit = MAX_LIMIT;
@@ -111,7 +120,7 @@ public class MainPage extends MainPageLayout {
 		serialFilter.setPlaceholder("Search by Unit Serial#");
 		serialFilter.addValueChangeListener(e -> {
 			if (!serialFilter.getValue().isEmpty()) filterView();
-			else refreshView();
+			else refreshView(current_view);
 		});
 		serialFilter.setValueChangeMode(ValueChangeMode.LAZY);
 	}
@@ -120,11 +129,11 @@ public class MainPage extends MainPageLayout {
 	 * Prepares the functions that will trigger when the various UI buttons are pressed.
 	 */
 	private void prepareButtons() {
-		outstandingOrders.addClickListener(e -> refreshView());
-		internalOrders.addClickListener(e -> refreshViewInternal());
-		dueOrders.addClickListener(e -> refreshViewDue());
-		pullOutOrders.addClickListener(e -> refreshViewPull());
-		returnedOrders.addClickListener(e -> refreshViewReturned());
+		outstandingOrders.addClickListener(e -> refreshView(0));
+		internalOrders.addClickListener(e -> refreshView(1));
+		dueOrders.addClickListener(e -> refreshView(2));
+		pullOutOrders.addClickListener(e -> refreshView(3));
+		returnedOrders.addClickListener(e -> refreshView(4));
 		
 		addOrder.addClickListener(e -> {
 			layout.setVisible(false);
@@ -165,20 +174,38 @@ public class MainPage extends MainPageLayout {
 		update = constructor.filterOrders(manager, serialFilter.getValue());
 		
 		display_orders.setItems(update);
+		pagination.setVisible(false);
 	}
 	
 	/**
 	 * Refreshes the display grid with the list of active DemoOrders.
 	 */
-	public void refreshView() {
+	public void refreshView(int option) {
 		List<DemoOrder> update = new ArrayList<>();
+		current_view = option;
 		offset = 0;
 		
-		count = constructor.getOrderCount(manager);
+		count = constructor.getOrderCount(manager, option);
 		
 		limit = (offset + limit > count) ? count - offset : limit;
 		
-		update = constructor.constructOrders(manager, offset, limit);
+		switch (option) {
+		case 0:
+			update = constructor.constructOrders(manager, offset, limit);
+			break;
+		case 1:
+			update = constructor.constructInHouseOrders(manager, offset, limit);
+			break;
+		case 2:
+			update = constructor.constructDueOrdersNoItems(manager, offset, limit);
+			break;
+		case 3:
+			update = constructor.constructPullOutOrders(manager, offset, limit);
+			break;
+		case 4:
+			update = constructor.constructReturnedOrders(manager, offset, limit);
+			break;
+		}
 		
 		display_orders.setItems(update);
 		display_count.setValue(String.format("%d-%d of %d", offset, offset+limit, count));
@@ -191,56 +218,28 @@ public class MainPage extends MainPageLayout {
 	 * @param offset
 	 * @param limit
 	 */
-	private void displayNew(int offset, int limit) {
+	private void displayNew(int offset, int limit, int option) {
 		List<DemoOrder> update = new ArrayList<>();
 		
-		update = constructor.constructOrders(manager, offset, limit);
+		switch (option) {
+		case 0:
+			update = constructor.constructOrders(manager, offset, limit);
+			break;
+		case 1:
+			update = constructor.constructInHouseOrders(manager, offset, limit);
+			break;
+		case 2:
+			update = constructor.constructDueOrdersNoItems(manager, offset, limit);
+			break;
+		case 3:
+			update = constructor.constructPullOutOrders(manager, offset, limit);
+			break;
+		case 4:
+			update = constructor.constructReturnedOrders(manager, offset, limit);
+			break;
+		}
 		
 		display_orders.setItems(update);
-	}
-	
-	/**
-	 * Refreshes the display grid with the list of in-house DemoOrders.
-	 */
-	public void refreshViewInternal() {
-		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructInHouseOrders(manager);
-		
-		display_orders.setItems(update);
-		pagination.setVisible(false);
-	}
-	
-	/**
-	 * Refreshes the display grid with the list of DemoOrders due in 7 days or less.
-	 */
-	public void refreshViewDue() {
-		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructDueOrdersNoItems(manager);
-		
-		display_orders.setItems(update);
-		pagination.setVisible(false);
-	}
-	
-	/**
-	 * Refreshes the display grid with the list of DemoOrders being pulled-out from the customer.
-	 */
-	public void refreshViewPull() {
-		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructPullOutOrders(manager);
-		
-		display_orders.setItems(update);
-		pagination.setVisible(false);
-	}
-	
-	/**
-	 * Refreshes the display grid with the list of DemoOrders that have been completed.
-	 */
-	public void refreshViewReturned() {
-		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.constructReturnedOrders(manager);
-		
-		display_orders.setItems(update);
-		pagination.setVisible(false);
 	}
 	
 	/**

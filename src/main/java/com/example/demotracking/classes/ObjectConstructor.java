@@ -147,6 +147,7 @@ public class ObjectConstructor {
 	 * @return
 	 */
 	private List<DemoOrder> parseOrders(String foo, int offset, int limit) {
+		System.out.println("parseOrders: " + String.valueOf(offset) + ", " + String.valueOf(limit));
 		List<DemoOrder> parsed_data = new ArrayList<>();
 		List<String> bar = new ArrayList<String>(Arrays.asList(foo.split("::\n")));
 		bar = bar.subList(offset, offset+limit);
@@ -333,10 +334,40 @@ public class ObjectConstructor {
 	 * @param manager
 	 * @return
 	 */
-	public int getOrderCount(ConnectionManager manager) {
-		manager.connect();
-		String result = manager.send(constructMessage("ViewOrders", new ArrayList<String>()));
-		manager.disconnect();
+	public int getOrderCount(ConnectionManager manager, int option) {
+		String result = "";
+		
+		switch (option) {
+		case 0:
+			manager.connect();
+			result = manager.send(constructMessage("ViewOrders", new ArrayList<String>()));
+			manager.disconnect();
+			break;
+		case 1:
+			manager.connect();
+			result = manager.send(constructMessage("ViewInHouseOrders", new ArrayList<String>()));
+			manager.disconnect();
+			break;
+		case 2:
+			manager.connect();
+			result = manager.send(constructMessage("ViewDueOrders", new ArrayList<String>()));
+			manager.disconnect();
+			break;
+		case 3:
+			manager.connect();
+			result = manager.send(constructMessage("ViewPullOutOrders", new ArrayList<String>()));
+			manager.disconnect();
+			break;
+		case 4:
+			manager.connect();
+			result = manager.send(constructMessage("ViewReturnedOrders", new ArrayList<String>()));
+			manager.disconnect();
+			break;
+		default:
+			manager.connect();
+			result = manager.send(constructMessage("ViewOrders", new ArrayList<String>()));
+			manager.disconnect();
+		}
 		
 		return orderCount(result);
 	}
@@ -373,12 +404,12 @@ public class ObjectConstructor {
 	 * @param manager
 	 * @return
 	 */
-	public List<DemoOrder> constructInHouseOrders(ConnectionManager manager) {
+	public List<DemoOrder> constructInHouseOrders(ConnectionManager manager, int offset, int limit) {
 		manager.connect();
 		String result = manager.send(constructMessage("ViewInHouseOrders", new ArrayList<String>()));
 		manager.disconnect();
 		
-		return parseOrders(result);
+		return parseOrders(result, offset, limit);
 	}
 	
 	/***
@@ -386,12 +417,12 @@ public class ObjectConstructor {
 	 * @param manager
 	 * @return
 	 */
-	public List<DemoOrder> constructDueOrdersNoItems(ConnectionManager manager) {
+	public List<DemoOrder> constructDueOrdersNoItems(ConnectionManager manager, int offset, int limit) {
 		manager.connect();
 		String result = manager.send(constructMessage("ViewDueOrders", new ArrayList<String>()));
 		manager.disconnect();
 		
-		return parseOrders(result);
+		return parseOrders(result, offset, limit);
 	}
 	
 	/**
@@ -399,12 +430,12 @@ public class ObjectConstructor {
 	 * @param manager
 	 * @return
 	 */
-	public List<DemoOrder> constructPullOutOrders(ConnectionManager manager) {
+	public List<DemoOrder> constructPullOutOrders(ConnectionManager manager, int offset, int limit) {
 		manager.connect();
 		String result = manager.send(constructMessage("ViewPullOutOrders", new ArrayList<String>()));
 		manager.disconnect();
 		
-		return parseOrders(result);
+		return parseOrders(result, offset, limit);
 	}
 	
 	/**
@@ -412,12 +443,12 @@ public class ObjectConstructor {
 	 * @param manager
 	 * @return
 	 */
-	public List<DemoOrder> constructReturnedOrders(ConnectionManager manager) {
+	public List<DemoOrder> constructReturnedOrders(ConnectionManager manager, int offset, int limit) {
 		manager.connect();
 		String result = manager.send(constructMessage("ViewReturnedOrders", new ArrayList<String>()));
 		manager.disconnect();
 		
-		return parseOrders(result);
+		return parseOrders(result, offset, limit);
 	}
 	
 	/***

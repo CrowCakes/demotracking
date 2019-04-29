@@ -282,7 +282,7 @@ public class OrderForm extends OrderFormLayout {
 			Notification.show("Edit Order", result, Notification.Type.HUMANIZED_MESSAGE);
 		}
 		
-		parent.refreshView();
+		parent.refreshView(0);
 		setVisible(false);
 		parent.setLayoutVisible();
 	}
@@ -309,7 +309,7 @@ public class OrderForm extends OrderFormLayout {
 		
 		Notification.show("Delete Order", result, Notification.Type.HUMANIZED_MESSAGE);
 		
-		parent.refreshView();
+		parent.refreshView(0);
 		setVisible(false);
 		parent.setLayoutVisible();
 	}
