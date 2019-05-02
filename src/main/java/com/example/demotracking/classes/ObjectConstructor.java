@@ -13,7 +13,7 @@ public class ObjectConstructor {
 	 * @return
 	 */
 	private int orderCount(String foo) {
-		List<String> bar = new ArrayList<String>(Arrays.asList(foo.split("::\n")));
+		List<DemoOrder> bar = parseOrders(foo);
 		return bar.size();
 	}
 	
@@ -150,7 +150,6 @@ public class ObjectConstructor {
 		System.out.println("parseOrders: " + String.valueOf(offset) + ", " + String.valueOf(limit));
 		List<DemoOrder> parsed_data = new ArrayList<>();
 		List<String> bar = new ArrayList<String>(Arrays.asList(foo.split("::\n")));
-		bar = bar.subList(offset, offset+limit);
 		
 		List<String> foobar;
 		DemoOrder previous = null;
@@ -262,7 +261,7 @@ public class ObjectConstructor {
 			}
 		}
 		
-		return parsed_data;
+		return parsed_data.subList(offset, offset+limit);
 	}
 	
 	/**

@@ -99,6 +99,9 @@ public class OrderForm extends OrderFormLayout {
 		items.deselectAll();
 		parts.deselectAll();
 		
+		save.setEnabled(true);
+		delete.setEnabled(true);
+		
 		setVisible(true);
 	}
 	
@@ -127,19 +130,24 @@ public class OrderForm extends OrderFormLayout {
 	 */
 	private void prepare_buttons() {
 		save.addClickListener(e -> save());
-		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
-				"Confirmation", "Delete this Schedule?", "Yes", "No",
-				new ConfirmDialog.Listener() {
-					public void onClose(ConfirmDialog dialog) {
-		        		if (dialog.isConfirmed()) {
-		        			delete();
-		        		}
-		        		else {
-		        			
-		        		}
+		delete.addClickListener(e -> {
+			save.setEnabled(false);
+			
+			ConfirmDialog.show(this.getUI(), 
+					"Confirmation", "Delete this Schedule?", "Yes", "No",
+					new ConfirmDialog.Listener() {
+						public void onClose(ConfirmDialog dialog) {
+			        		if (dialog.isConfirmed()) {
+			        			delete();
+			        		}
+			        		else {
+			        			save.setEnabled(true);
+			        			delete.setEnabled(true);
+			        		}
+						}
 					}
-				}
-			)
+				);
+		}
 		);
 		cancel.addClickListener(e -> cancel());
 		
@@ -178,6 +186,9 @@ public class OrderForm extends OrderFormLayout {
 		});
 		
 		addPart.setEnabled(false);
+		
+		save.setDisableOnClick(true);
+		delete.setDisableOnClick(true);
 	}
 	
 	/**

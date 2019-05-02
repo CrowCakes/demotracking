@@ -61,6 +61,7 @@ public class PartPanel extends Panel {
 		this.orderItemPart = part;
 		
 		binder.setBean(this.orderItemPart);
+		save.setEnabled(true);
 		delete.setEnabled(this.orderItemPart.getListID() != 0);
 		setVisible(true);
 	}
@@ -69,22 +70,33 @@ public class PartPanel extends Panel {
 	 * Prepares the functions triggered by pressing the various buttons on the form.
 	 */
 	private void prepare_buttons() {
-		save.addClickListener(e -> save());
-		delete.addClickListener(e -> ConfirmDialog.show(this.getUI(), 
-				"Confirmation", "Delete this Schedule?", "Yes", "No",
-				new ConfirmDialog.Listener() {
-					public void onClose(ConfirmDialog dialog) {
-		        		if (dialog.isConfirmed()) {
-		        			delete();
-		        		}
-		        		else {
-		        			
-		        		}
+		save.addClickListener(e -> {
+			delete.setEnabled(false);
+			save();
+		});
+		delete.addClickListener(e -> {
+			save.setEnabled(false);
+			
+			ConfirmDialog.show(this.getUI(), 
+					"Confirmation", "Delete this Schedule?", "Yes", "No",
+					new ConfirmDialog.Listener() {
+						public void onClose(ConfirmDialog dialog) {
+			        		if (dialog.isConfirmed()) {
+			        			delete();
+			        		}
+			        		else {
+			        			save.setEnabled(true);
+			        			delete.setEnabled(true);
+			        		}
+						}
 					}
-				}
-			)
+				);
+		}
 		);
 		cancel.addClickListener(e -> cancel());
+		
+		save.setDisableOnClick(true);
+		delete.setDisableOnClick(true);
 	}
 
 	/**

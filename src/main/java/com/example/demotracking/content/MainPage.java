@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -170,8 +171,15 @@ public class MainPage extends MainPageLayout {
 	 * Refreshes the display grid with DemoOrders whose Serial# contains the user input.
 	 */
 	private void filterView() {
+		List<String> foo = Arrays.asList(serialFilter.getValue().split("\\s*/\\s*"));
+		foo.replaceAll(string -> {
+			String temp = String.format(".*%s.*", string);
+			return temp;
+		});
+		String parameter = String.join("|", foo);
+		
 		List<DemoOrder> update = new ArrayList<>();
-		update = constructor.filterOrders(manager, serialFilter.getValue());
+		update = constructor.filterOrders(manager, parameter);
 		
 		display_orders.setItems(update);
 		pagination.setVisible(false);
