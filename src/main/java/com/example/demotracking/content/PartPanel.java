@@ -13,12 +13,13 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class PartPanel extends Panel {
 	protected TextField partName = new TextField("Part");
-	protected TextField serial = new TextField("Serial#");
+	protected TextArea serial = new TextArea("Serial#");
 	
 	protected Button save = new Button("Save");
 	protected Button cancel = new Button("Cancel");

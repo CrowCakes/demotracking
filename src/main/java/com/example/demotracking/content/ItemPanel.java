@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ItemPanel extends Panel {
 	protected TextField name = new TextField("Item Name");
 	protected TextField quantity = new TextField("Quantity");
-	protected TextField serial = new TextField("Serial#");
+	protected TextArea serial = new TextArea("Serial#");
 	protected TextField source = new TextField("Source");
 	protected TextArea itemRemarks = new TextArea("Item Remarks");
 	protected NativeSelect<String> itemStatus = new NativeSelect<>("Item Status");
