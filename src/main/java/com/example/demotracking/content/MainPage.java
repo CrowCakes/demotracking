@@ -143,6 +143,7 @@ public class MainPage extends MainPageLayout {
 		);
 		
 		openReport.addClickListener(e -> {
+			openReport.setEnabled(false);
 			Notification.show("Notice", "Please refresh the page after the report is generated", Notification.Type.TRAY_NOTIFICATION);
 		});
 		OnDemandFileDownloader.OnDemandStreamResource resource = new  OnDemandFileDownloader.OnDemandStreamResource()
