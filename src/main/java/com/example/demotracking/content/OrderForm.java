@@ -162,7 +162,7 @@ public class OrderForm extends OrderFormLayout {
 							order.getOrderID(), 
 							Date.valueOf(LocalDate.now()), 
 							Date.valueOf(LocalDate.now()), 
-							"")
+							"n/a")
 					);
 		});
 		addItem.addClickListener(e -> {
